@@ -45,7 +45,6 @@ const App: React.FC = () => {
         console.log({categories})
         Promise.all(categories.map( (data: any) => api.getCategory(data.id)))
           .then( waterfall => {
-            console.log({waterfall})
             // @ts-ignore
             setCategories(waterfall)
           })
