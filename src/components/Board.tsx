@@ -11,7 +11,7 @@ const CategoryName = (props: any) => {
   return(
     <div 
       onClick={isMobile && (() => onShowChildrenChange(!showChildren)) || null}
-      style={{border: '1px solid black', display: 'flex', flexGrow: 1, flexBasis: 1, justifyContent: 'center', flexDirection: 'row'}
+      style={{border: '1px solid black', display: 'flex', flexGrow: 1, justifyContent: 'center', flexDirection: 'row'}
     }>
       <div style={{paddingLeft: isMobile ? '1em' : '', display: 'flex', alignSelf: 'center'}}>{title}</div>
       { isMobile && (
@@ -30,7 +30,6 @@ const CategoryName = (props: any) => {
 }
 
 const ClueItem = (props: any) => {
-  console.log('CluesItem', {props})
   const {
     id,
     value,
@@ -38,8 +37,18 @@ const ClueItem = (props: any) => {
     history
   } = props
   return (
-    <div style={{border: '1px solid black', color: '#EFBE66'}} onClick={() => setCardId(id, history)}>${value}</div>
+    <div style={{border: '1px solid black', color: '#EFBE66', minHeight: '25px' }} onClick={() => setCardId(id, history)}>${value}</div>
   )
+}
+
+const ClueContainer = (props: any) => {
+  const { category, setCardId, history } = props
+  return category.clues.map( (clue: object, index: number) => {
+    if (index < 5) {
+      return <ClueItem key={`ci_${index}`} history={history} setCardId={setCardId} {...clue} />
+    }
+    return null
+  })
 }
 
 const CategoryRow = (props: any) => {
@@ -47,31 +56,26 @@ const CategoryRow = (props: any) => {
   const [showChildren, onShowChildrenChange]  = useState(false)
   // NOTE: this only runs "once", dynamic dev tool window change fails this
   const isMobile = isMobileCheck()
-  const children = category.clues.map( (clue: object, index: number) => {
-    if (index < 5) {
-      return <ClueItem history={history} setCardId={setCardId} {...clue} />
-    }
-    return null
-  })
-  return <div style={{color: 'white', display: 'flex', flexDirection: 'column', backgroundColor: 'blue', flexGrow: 1, flexBasis: 1, width: '100%'}}>
+  return <div style={{color: 'white', display: 'flex', flexDirection: 'column', backgroundColor: 'blue', flexGrow: 1, minHeight: 100, width: '100%'}}>
     <CategoryName isMobile={isMobile} showChildren={showChildren} onShowChildrenChange={onShowChildrenChange} {...category} />
+    <div style={{display: 'flex', flexDirection: 'column' }}>
     {
       isMobile
-      ? showChildren ? children : null 
-      : children
+      ? showChildren ? <ClueContainer category={category} setCardId={setCardId} history={history}/>: null 
+      : <ClueContainer category={category} setCardId={setCardId} history={history}/>
     }
+    </div>
   </div>
 }
 
 const Board = (props: any) => {
-  console.log({props})
   const {
     categories,
     setCardId,
     history
   } = props
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', justifyContent: 'center', overflowY: 'auto', backgroundColor: 'blue'}}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', justifyContent: 'center', overflowY: 'auto', backgroundColor: 'blue', flexGrow: 1, minHeight: 500}}>
       <div
         className='categories-container'
       >
