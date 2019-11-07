@@ -2,7 +2,7 @@ import React from 'react'
 
 interface ButtonProps {
   label: string;
-  onClick?: () => null;
+  onClick?: () => null | void;
   type?: string
 }
 

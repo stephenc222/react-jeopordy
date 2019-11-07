@@ -4,6 +4,7 @@ import Button from './Button'
 const Clue = (props: any) => {
   const { currentClue = {}, setCorrectAnswerArr, history } = props
   const [answer, setAnswer] = useState('')
+  const [showQuestion, onShowQuestionChange] = useState(true)
   const clue = currentClue.id ? currentClue : JSON.parse(localStorage.getItem('currentClue') || '')
   if (!clue.id) {
     return <div>Something went wrong and I have no clue what! Pun intended...</div>
@@ -26,8 +27,13 @@ const Clue = (props: any) => {
 
   return (
     <div style={{height: '100%', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-      <div>{question}</div>
-      <form onSubmit={(event) => checkAnswer(event, answer)}>
+      <div style={{position: 'absolute', top: window.innerHeight - 150, padding: 10}}>
+        <Button onClick={() => onShowQuestionChange(!showQuestion)} label={`Show ${showQuestion ? 'Clue' : 'Question'}`}/>
+      </div>
+      {
+        showQuestion
+        ? <div>{question}</div>
+        :<form onSubmit={(event) => checkAnswer(event, answer)}>
         <div style={{display: 'flex', padding: '3em', flexDirection: 'column'}}>
           <div style={{ display: 'flex', paddingBottom: 20, flexDirection: 'column' }}>
             <div>
@@ -40,6 +46,7 @@ const Clue = (props: any) => {
           <Button label='Done'/>
         </div>
       </form>
+      }
     </div>
   )
 }
