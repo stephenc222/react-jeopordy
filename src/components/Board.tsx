@@ -11,7 +11,7 @@ const CategoryName = (props: any) => {
   return(
     <div 
       onClick={isMobile && (() => onShowChildrenChange(!showChildren)) || null}
-      style={{border: '1px solid black', display: 'flex', flexGrow: 1, justifyContent: 'center', flexDirection: 'row'}
+      style={{ minHeight: '3em', maxHeight: '3em', border: '1px solid black', display: 'flex', flexGrow: 1, justifyContent: 'center', flexDirection: 'row' }
     }>
       <div style={{paddingLeft: isMobile ? '1em' : '', display: 'flex', alignSelf: 'center'}}>{title}</div>
       { isMobile && (
@@ -38,10 +38,10 @@ const ClueItem = (props: any) => {
     correctAnswerArr
   } = props
   if (correctAnswerArr.includes(id)) {
-    return <div style={{border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>&nbsp;</div>
+    return <div style={{ border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>&nbsp;</div>
   }
   return (
-    <div style={{border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>${value}</div>
+    <div style={{textAlign: 'center', border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>${value}</div>
   )
 }
 

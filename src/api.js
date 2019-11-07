@@ -11,7 +11,8 @@ const api = {
   },
   getCategories: (num = 5) => {
     // default to 5
-    return fetch(URL + `categories?count=${num}`, { mode: 'cors' })
+    const offset = Math.floor(Math.random() * 95)
+    return fetch(URL + `categories?count=${num}&offset=${offset}`, { mode: 'cors' })
       .then(res => res.json())
       .then(data => data)
       .catch(err => console.error(err))
