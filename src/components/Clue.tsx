@@ -4,10 +4,11 @@ import { isMobileCheck } from '../utils/isMobileCheck'
 
 const isMobile = isMobileCheck()
 const Clue = (props: any) => {
-  const { currentClue = {}, setCorrectAnswerArr, history } = props
+  const { currentClue = {}, setSelectedAnswerArr, history, dailyDoubleIndex } = props
+  const clue = currentClue.id ? currentClue : JSON.parse(localStorage.getItem('currentClue') || '')
   const [answer, setAnswer] = useState('')
   const [showQuestion, onShowQuestionChange] = useState(true)
-  const clue = currentClue.id ? currentClue : JSON.parse(localStorage.getItem('currentClue') || '')
+  const [showDailyDouble, onShowDailyDoubleChange] = useState(clue.id === dailyDoubleIndex)
   if (!clue.id) {
     return <div>Something went wrong and I have no clue what! Pun intended...</div>
   }
@@ -19,12 +20,19 @@ const Clue = (props: any) => {
     }
     if (answerAttempt.toLowerCase() === clueAnswer.toLowerCase()) {
       console.log('correct!')
-      setCorrectAnswerArr(clue.id)
     } else {
       console.log('not correct...')
     }
+    setSelectedAnswerArr(clue.id)
     history.push('')
     return
+  }
+  if (showDailyDouble) {
+    return (
+      <div onClick={() => onShowDailyDoubleChange(false)} style={{height: '100%', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <div>Daily Double</div>
+      </div>
+    )
   }
 
   return (

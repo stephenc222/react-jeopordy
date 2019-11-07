@@ -31,9 +31,9 @@ const ClueItem = (props: any) => {
     value,
     setCardId,
     history,
-    correctAnswerArr
+    selectedAnswerArr
   } = props
-  if (correctAnswerArr.includes(id)) {
+  if (selectedAnswerArr.includes(id)) {
     return <div style={{ border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>&nbsp;</div>
   }
   return (
@@ -42,17 +42,17 @@ const ClueItem = (props: any) => {
 }
 
 const ClueContainer = (props: any) => {
-  const { category, setCardId, history, correctAnswerArr } = props
+  const { category, setCardId, history, selectedAnswerArr } = props
   return category.clues.map( (clue: object, index: number) => {
     if (index < 5) {
-      return <ClueItem key={`ci_${index}`} correctAnswerArr={correctAnswerArr}  history={history} setCardId={setCardId} {...clue} />
+      return <ClueItem key={`ci_${index}`} selectedAnswerArr={selectedAnswerArr}  history={history} setCardId={setCardId} {...clue} />
     }
     return null
   })
 }
 
 const CategoryRow = (props: any) => {
-  const { category, index, setCardId, history, correctAnswerArr } = props
+  const { category, index, setCardId, history, selectedAnswerArr } = props
   const [showChildren, onShowChildrenChange]  = useState(false)
   // NOTE: this only runs "once", dynamic dev tool window change fails this
   const isMobile = isMobileCheck()
@@ -61,8 +61,8 @@ const CategoryRow = (props: any) => {
     <div style={{display: 'flex', flexDirection: 'column' }}>
     {
       isMobile
-      ? showChildren ? <ClueContainer correctAnswerArr={correctAnswerArr} category={category} setCardId={setCardId} history={history}/>: null 
-      : <ClueContainer correctAnswerArr={correctAnswerArr} category={category} setCardId={setCardId} history={history}/>
+      ? showChildren ? <ClueContainer selectedAnswerArr={selectedAnswerArr} category={category} setCardId={setCardId} history={history}/>: null 
+      : <ClueContainer selectedAnswerArr={selectedAnswerArr} category={category} setCardId={setCardId} history={history}/>
     }
     </div>
   </div>
@@ -73,7 +73,7 @@ const Board = (props: any) => {
     categories,
     setCardId,
     history,
-    correctAnswerArr
+    selectedAnswerArr
   } = props
   console.log({props})
   return (
@@ -83,7 +83,7 @@ const Board = (props: any) => {
       >
       {
         categories.map( (category: any, index: number) => {
-          return <CategoryRow correctAnswerArr={correctAnswerArr} setCardId={setCardId} category={category} history={history} index={index}/>
+          return <CategoryRow selectedAnswerArr={selectedAnswerArr} setCardId={setCardId} category={category} history={history} index={index}/>
         })
       }
       </div>

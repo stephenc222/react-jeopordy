@@ -13,12 +13,18 @@ import './App.css';
 import Button from './components/Button';
 
 
-const getCategories = (setData: (data: any[]) => null, setError: (err: string) => null) => {
+const getCategories = (setData: (data: any[]) => null, setError: (err: string) => null, setDailyDoubleIndex: (index: number) => void) => {
   api.getCategories()
   .then( categories => {
     Promise.all(categories.map( (data: any) => api.getCategory(data.id)))
       .then( waterfall => {
         // @ts-ignore
+        const categoryNum = Math.floor(Math.random() * waterfall.length)
+        // "5" is the number of clues to be shown in a category for now
+        const clueNum = Math.floor(Math.random() * 5)
+        // @ts-ignore
+        const { id } = waterfall[categoryNum].clues[clueNum]
+        setDailyDoubleIndex(id)
         setData(waterfall)
       })
       .catch( err => {
@@ -46,7 +52,8 @@ const getCurrentClue = (id: string, categories: any[]) => {
 const App: React.FC = () => {
   const [categories, setCategories] = useState([])
   const [currentClue, setCurrentClue] = useState({})
-  const [correctAnswerArr, _setCorrectAnswerArr] = useState([])
+  const [selectedAnswerArr, _setSelectedAnswerArr] = useState([])
+  const [dailyDoubleIndex, setDailyDoubleIndex] = useState(0)
   // hide in API
   const [error, setError] = useState('')
   const setCardId = (id: string, history: any) => {
@@ -55,25 +62,25 @@ const App: React.FC = () => {
     setCurrentClue(currentClue)
     history.push(`/clue/${id}`)
   }
-  const setCorrectAnswerArr = (nextCorrectAnswer: string) => {
-    const _correctAnswerArr = correctAnswerArr.slice()
+  const setSelectedAnswerArr = (nextCorrectAnswer: string) => {
+    const _correctAnswerArr = selectedAnswerArr.slice()
     // @ts-ignore
     _correctAnswerArr.push(nextCorrectAnswer)
     // @ts-ignore
-    _setCorrectAnswerArr(_correctAnswerArr)
+    _setSelectedAnswerArr(_correctAnswerArr)
   }
   const resetGame = (history: any) => {
     localStorage.removeItem('currentClue')
     // @ts-ignore
-    getCategories(setCategories, setError)
-    _setCorrectAnswerArr([])
+    getCategories(setCategories, setError, setDailyDoubleIndex)
+    _setSelectedAnswerArr([])
     // @ts-ignore
     history.push('')
     return null
   }
   useEffect(() => {
     // @ts-ignore
-    getCategories(setCategories, setError)
+    getCategories(setCategories, setError, setDailyDoubleIndex)
     return () => {
     };
   }, [])
@@ -95,9 +102,9 @@ const App: React.FC = () => {
         <Route 
           exact
           path='/clue/:id'
-          render={(props) => <Clue setCorrectAnswerArr={setCorrectAnswerArr} currentClue={currentClue} setCardId={setCardId} {...props}/>}
+          render={(props) => <Clue dailyDoubleIndex={dailyDoubleIndex} setSelectedAnswerArr={setSelectedAnswerArr} currentClue={currentClue} setCardId={setCardId} {...props}/>}
         />
-        <Route exact path='/' render={(props) => <Board  correctAnswerArr={correctAnswerArr} setCardId={setCardId} categories={categories} {...props}/>}/>
+        <Route exact path='/' render={(props) => <Board selectedAnswerArr={selectedAnswerArr} setCardId={setCardId} categories={categories} {...props}/>}/>
       </div>
     </Router>
   );
