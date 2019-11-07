@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
+import { isMobileCheck } from '../utils/isMobileCheck'
 import './Board.css'
-
-
-const MOBILE_WIDTH = 422
-
-const isMobileCheck = () => window.innerWidth <= MOBILE_WIDTH
 
 const CategoryName = (props: any) => {
   const { title, isMobile, onShowChildrenChange, showChildren } = props

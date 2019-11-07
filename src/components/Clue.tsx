@@ -1,6 +1,8 @@
 import React, { useState, FormEvent } from 'react'
 import Button from './Button'
+import { isMobileCheck } from '../utils/isMobileCheck'
 
+const isMobile = isMobileCheck()
 const Clue = (props: any) => {
   const { currentClue = {}, setCorrectAnswerArr, history } = props
   const [answer, setAnswer] = useState('')
@@ -27,7 +29,7 @@ const Clue = (props: any) => {
 
   return (
     <div style={{height: '100%', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-      <div style={{position: 'absolute', top: window.innerHeight - 150, padding: 10}}>
+      <div style={{position: 'absolute', top: window.innerHeight - (isMobile ? 100 : 150), padding: 10}}>
         <Button onClick={() => onShowQuestionChange(!showQuestion)} label={`Show ${showQuestion ? 'Clue' : 'Question'}`}/>
       </div>
       {
