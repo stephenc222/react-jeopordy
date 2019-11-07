@@ -7,12 +7,14 @@ const api = {
     return fetch(`${URL}category${id ? `?id=${id}&count=10` : ''}`, { mode: 'cors' })
       .then(res => res.json())
       .then(data => data)
+      .catch(err => console.error(err))
   },
-  getCategories: () => {
+  getCategories: (num = 5) => {
     // default to 5
-    return fetch(URL + `categories?count=5`, { mode: 'cors' })
+    return fetch(URL + `categories?count=${num}`, { mode: 'cors' })
       .then(res => res.json())
       .then(data => data)
+      .catch(err => console.error(err))
   }
 }
 window.api = api

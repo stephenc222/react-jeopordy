@@ -13,8 +13,24 @@ import './App.css';
 import Button from './components/Button';
 
 
+const getCategories = (setData: (data: any[]) => null, setError: (err: string) => null) => {
+  api.getCategories()
+  .then( categories => {
+    Promise.all(categories.map( (data: any) => api.getCategory(data.id)))
+      .then( waterfall => {
+        // @ts-ignore
+        setData(waterfall)
+      })
+      .catch( err => {
+        console.error(err)
+      })
+  })
+  .catch( err => {
+    setError(err && err.message || 'Problem getting resources. Please try again.')
+  })
+}
+
 const getCurrentClue = (id: string, categories: any[]) => {
-  console.log({ id, categories})
   let currentClue = {}
   categories.forEach( category => {
     category.clues && category.clues.forEach( (clue: any) => {
@@ -30,7 +46,7 @@ const getCurrentClue = (id: string, categories: any[]) => {
 const App: React.FC = () => {
   const [categories, setCategories] = useState([])
   const [currentClue, setCurrentClue] = useState({})
-  const [correctAnswerArr, setCorrectAnswerArr] = useState([])
+  const [correctAnswerArr, _setCorrectAnswerArr] = useState([])
   // hide in API
   const [error, setError] = useState('')
   const setCardId = (id: string, history: any) => {
@@ -39,24 +55,25 @@ const App: React.FC = () => {
     setCurrentClue(currentClue)
     history.push(`/clue/${id}`)
   }
-  const resetGame = () => {
+  const setCorrectAnswerArr = (nextCorrectAnswer: string) => {
+    const _correctAnswerArr = correctAnswerArr.slice()
+    // @ts-ignore
+    _correctAnswerArr.push(nextCorrectAnswer)
+    // @ts-ignore
+    _setCorrectAnswerArr(_correctAnswerArr)
+  }
+  const resetGame = (history: any) => {
     localStorage.removeItem('currentClue')
+    // @ts-ignore
+    getCategories(setCategories, setError)
+    _setCorrectAnswerArr([])
+    // @ts-ignore
+    history.push('')
     return null
   }
   useEffect(() => {
-    api.getCategories()
-      .then( categories => {
-        const nextState = []
-        console.log({categories})
-        Promise.all(categories.map( (data: any) => api.getCategory(data.id)))
-          .then( waterfall => {
-            // @ts-ignore
-            setCategories(waterfall)
-          })
-      })
-      .catch( err => {
-        setError(err && err.message || 'Problem getting resources. Please try again.')
-      })
+    // @ts-ignore
+    getCategories(setCategories, setError)
     return () => {
     };
   }, [])
@@ -69,18 +86,18 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
           <div style={{padding: 10}}/>
           <div style={{padding: 10}}>
-            <Button label='Reset' onClick={resetGame}/>  
+            <Route path="*" render={(props) => <Button label='Reset' onClick={() => resetGame(props.history)} />  }/>
           </div>
         </div>
         <Route 
           exact
           path='/clue/:id'
-          render={(props) => <Clue currentClue={currentClue} setCardId={setCardId} {...props}/>}
+          render={(props) => <Clue setCorrectAnswerArr={setCorrectAnswerArr} currentClue={currentClue} setCardId={setCardId} {...props}/>}
         />
-        <Route exact path='/' render={(props) => <Board correctAnswerArr={correctAnswerArr} setCardId={setCardId} categories={categories} {...props}/>}/>
+        <Route exact path='/' render={(props) => <Board  correctAnswerArr={correctAnswerArr} setCardId={setCardId} categories={categories} {...props}/>}/>
       </div>
     </Router>
   );

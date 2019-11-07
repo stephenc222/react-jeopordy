@@ -2,10 +2,9 @@ import React, { useState, FormEvent } from 'react'
 import Button from './Button'
 
 const Clue = (props: any) => {
-  const { currentClue = {}, updateAnswerArr } = props
+  const { currentClue = {}, setCorrectAnswerArr, history } = props
   const [answer, setAnswer] = useState('')
   const clue = currentClue.id ? currentClue : JSON.parse(localStorage.getItem('currentClue') || '')
-  console.log({clue})
   if (!clue.id) {
     return <div>Something went wrong and I have no clue what! Pun intended...</div>
   }
@@ -17,9 +16,11 @@ const Clue = (props: any) => {
     }
     if (answerAttempt.toLowerCase() === clueAnswer.toLowerCase()) {
       console.log('correct!')
-      return
+      setCorrectAnswerArr(clue.id)
+    } else {
+      console.log('not correct...')
     }
-    console.log('not correct...')
+    history.push('')
     return
   }
 

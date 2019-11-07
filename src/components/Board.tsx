@@ -34,25 +34,29 @@ const ClueItem = (props: any) => {
     id,
     value,
     setCardId,
-    history
+    history,
+    correctAnswerArr
   } = props
+  if (correctAnswerArr.includes(id)) {
+    return <div style={{border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>&nbsp;</div>
+  }
   return (
-    <div style={{border: '1px solid black', color: '#EFBE66', minHeight: '25px' }} onClick={() => setCardId(id, history)}>${value}</div>
+    <div style={{border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>${value}</div>
   )
 }
 
 const ClueContainer = (props: any) => {
-  const { category, setCardId, history } = props
+  const { category, setCardId, history, correctAnswerArr } = props
   return category.clues.map( (clue: object, index: number) => {
     if (index < 5) {
-      return <ClueItem key={`ci_${index}`} history={history} setCardId={setCardId} {...clue} />
+      return <ClueItem key={`ci_${index}`} correctAnswerArr={correctAnswerArr}  history={history} setCardId={setCardId} {...clue} />
     }
     return null
   })
 }
 
 const CategoryRow = (props: any) => {
-  const { category, index, setCardId, history } = props
+  const { category, index, setCardId, history, correctAnswerArr } = props
   const [showChildren, onShowChildrenChange]  = useState(false)
   // NOTE: this only runs "once", dynamic dev tool window change fails this
   const isMobile = isMobileCheck()
@@ -61,8 +65,8 @@ const CategoryRow = (props: any) => {
     <div style={{display: 'flex', flexDirection: 'column' }}>
     {
       isMobile
-      ? showChildren ? <ClueContainer category={category} setCardId={setCardId} history={history}/>: null 
-      : <ClueContainer category={category} setCardId={setCardId} history={history}/>
+      ? showChildren ? <ClueContainer correctAnswerArr={correctAnswerArr} category={category} setCardId={setCardId} history={history}/>: null 
+      : <ClueContainer correctAnswerArr={correctAnswerArr} category={category} setCardId={setCardId} history={history}/>
     }
     </div>
   </div>
@@ -72,8 +76,10 @@ const Board = (props: any) => {
   const {
     categories,
     setCardId,
-    history
+    history,
+    correctAnswerArr
   } = props
+  console.log({props})
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', justifyContent: 'center', overflowY: 'auto', backgroundColor: 'blue', flexGrow: 1, minHeight: 500}}>
       <div
@@ -81,7 +87,7 @@ const Board = (props: any) => {
       >
       {
         categories.map( (category: any, index: number) => {
-          return <CategoryRow setCardId={setCardId} category={category} history={history} index={index}/>
+          return <CategoryRow correctAnswerArr={correctAnswerArr} setCardId={setCardId} category={category} history={history} index={index}/>
         })
       }
       </div>
