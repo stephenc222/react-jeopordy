@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom'
 import api from './api'
 import './App.css';
+import Button from './components/Button';
 
 
 const getCurrentClue = (id: string, categories: any[]) => {
@@ -38,6 +39,10 @@ const App: React.FC = () => {
     setCurrentClue(currentClue)
     history.push(`/clue/${id}`)
   }
+  const resetGame = () => {
+    localStorage.removeItem('currentClue')
+    return null
+  }
   useEffect(() => {
     api.getCategories()
       .then( categories => {
@@ -64,12 +69,16 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <div style={{padding: 10}}/>
+          <div style={{padding: 10}}>
+            <Button label='Reset' onClick={resetGame}/>  
+          </div>
+        </div>
         <Route 
           exact
           path='/clue/:id'
-          render={(props) => {
-            return <Clue currentClue={currentClue} setCardId={setCardId} {...props}/>
-          }}
+          render={(props) => <Clue currentClue={currentClue} setCardId={setCardId} {...props}/>}
         />
         <Route exact path='/' render={(props) => <Board correctAnswerArr={correctAnswerArr} setCardId={setCardId} categories={categories} {...props}/>}/>
       </div>
