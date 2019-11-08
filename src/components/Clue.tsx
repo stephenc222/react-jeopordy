@@ -29,28 +29,83 @@ const Clue = (props: any) => {
   }
   if (showDailyDouble) {
     return (
-      <div onClick={() => onShowDailyDoubleChange(false)} style={{height: '100%', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+      <div
+        onClick={() => onShowDailyDoubleChange(false)}
+        style={{
+          height: '100%',
+          color: 'white',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
         <div>Daily Double</div>
       </div>
     )
   }
 
   return (
-    <div style={{ color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-      <div style={{position: 'absolute', top: window.innerHeight - (isMobile ? 100 : 150), padding: 10}}>
-        <Button onClick={() => onShowQuestionChange(!showQuestion)} label={`Show ${showQuestion ? 'Clue' : 'Question'}`}/>
+    <div
+      style={{
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: window.innerHeight - (isMobile ? 100 : 150),
+          padding: 10
+        }}
+      >
+        <Button
+          onClick={() => onShowQuestionChange(!showQuestion)}
+          label={`Show ${showQuestion ? 'Clue' : 'Question'}`}
+        />
       </div>
       {
         showQuestion
-        ? <div style={{display: 'flex', padding: '3em'}}>{question}</div>
+        ? <div
+            style={{
+              display: 'flex',
+              padding: '3em'
+            }}
+          >{question}</div>
         :<form onSubmit={(event) => checkAnswer(event, answer)}>
-        <div style={{display: 'flex', padding: '3em', flexDirection: 'column'}}>
-          <div style={{ display: 'flex', paddingBottom: 20, flexDirection: 'column' }}>
+        <div
+          style={{
+            display: 'flex',
+            padding: '3em',
+            flexDirection: 'column'
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              paddingBottom: 20,
+              flexDirection: 'column'
+            }}
+          >
             <div>
               <label>What is:&nbsp;</label>
             </div>
             <div>
-              <input style={{borderRadius: '0.5em', minHeight: '1.5em',  maxHeight: '1.5em', alignSelf: 'center', fontSize: '.5em'}} type='text' onChange={(event) => setAnswer(event.target.value)} value={answer}/>
+              <input
+                style={{
+                  borderRadius: '0.5em',
+                  minHeight: '1.5em',
+                  maxHeight: '1.5em',
+                  alignSelf: 'center',
+                  fontSize: '.5em'
+                }}
+                type='text'
+                onChange={(event) => setAnswer(event.target.value)}
+                value={answer}
+              />
             </div>
           </div>
           <Button label='Done'/>

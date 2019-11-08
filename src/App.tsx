@@ -10,7 +10,6 @@ import api from './api'
 import './App.css';
 import Button from './components/Button';
 
-
 const getCategories = (setData: (data: any[]) => null, setError: (err: string) => null, setDailyDoubleIndex: (index: number) => void, { numClues = 5, numCategories = 5} = {}) => {
   api.getCategories(numCategories)
   .then( categories => {
@@ -98,20 +97,51 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
-        <Control setNumCategories={setNumCategories} setNumClues={setNumClues} numClues={numClues} numCategories={numCategories}>
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <div style={{padding: 10}}/>
-            <div style={{padding: 10}}>
-              <Route path="*" render={(props) => <Button label='Reset' onClick={() => resetGame(props.history)} />  }/>
+        <Control
+          setNumCategories={setNumCategories}
+          setNumClues={setNumClues}
+          numClues={numClues}
+          numCategories={numCategories}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between'
+            }}
+          >
+            <div style={{ padding: 10 }}/>
+            <div style={{ padding: 10 }}>
+              <Route
+                path="*"
+                render={
+                  (props) => <Button label='Reset' onClick={() => resetGame(props.history)} />
+                }
+              />
            </div>
         </div>
         </Control>
         <Route 
           exact
           path='/clue/:id'
-          render={(props) => <Clue dailyDoubleIndex={dailyDoubleIndex} setSelectedAnswerArr={setSelectedAnswerArr} currentClue={currentClue} setCardId={setCardId} {...props}/>}
+          render={(props) =>
+            <Clue
+              dailyDoubleIndex={dailyDoubleIndex}
+              setSelectedAnswerArr={setSelectedAnswerArr}
+              currentClue={currentClue}
+              setCardId={setCardId}
+              {...props}
+            />
+          }
         />
-        <Route exact path='/' render={(props) => <Board selectedAnswerArr={selectedAnswerArr} setCardId={setCardId} categories={categories} {...props}/>}/>
+        <Route exact path='/' render={(props) =>
+          <Board
+            selectedAnswerArr={selectedAnswerArr}
+            setCardId={setCardId}
+            categories={categories}
+            {...props}
+          />}
+        />
       </div>
     </Router>
   );

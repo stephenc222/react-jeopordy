@@ -7,11 +7,31 @@ const CategoryName = (props: any) => {
   return(
     <div 
       onClick={isMobile && (() => onShowChildrenChange(!showChildren)) || null}
-      style={{ minHeight: '3em', maxHeight: '3em', border: '1px solid black', display: 'flex', flexGrow: 1, justifyContent: 'center', flexDirection: 'row' }
-    }>
-      <div style={{paddingLeft: isMobile ? '1em' : '', display: 'flex', alignSelf: 'center'}}>{title}</div>
+      style={{
+        minHeight: '3em',
+        maxHeight: '3em',
+        border: '1px solid black',
+        display: 'flex',
+        flexGrow: 1,
+        justifyContent: 'center',
+        flexDirection: 'row'
+      }}
+    >
+      <div
+        style={{
+          paddingLeft: isMobile ? '1em' : '',
+          display: 'flex',
+          alignSelf: 'center'
+        }}
+      >{title}</div>
       { isMobile && (
-        <div style={{display: 'flex', marginLeft: 'auto', padding: 10}}>
+        <div
+          style={{
+            display: 'flex',
+            marginLeft: 'auto',
+            padding: 10
+          }}
+        >
           {
             showChildren
             ?<div>-</div>
@@ -34,10 +54,32 @@ const ClueItem = (props: any) => {
     selectedAnswerArr
   } = props
   if (selectedAnswerArr.includes(id)) {
-    return <div style={{ border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>&nbsp;</div>
-  }
+    return (
+      <div
+        style={{
+          border: '1px solid black',
+          color: '#EFBE66',
+          minHeight: '25px',
+          cursor: 'pointer'
+        }}
+        onClick={() => setCardId(id, history)}
+      >
+        &nbsp;
+      </div>
+    )}
   return (
-    <div style={{textAlign: 'center', border: '1px solid black', color: '#EFBE66', minHeight: '25px', cursor: 'pointer' }} onClick={() => setCardId(id, history)}>${value}</div>
+    <div
+      style={{
+        textAlign: 'center',
+        border: '1px solid black',
+        color: '#EFBE66',
+        minHeight: '25px',
+        cursor: 'pointer'
+      }}
+      onClick={() => setCardId(id, history)}
+    >
+      ${value}
+    </div>
   )
 }
 
@@ -52,20 +94,44 @@ const ClueContainer = (props: any) => {
 }
 
 const CategoryRow = (props: any) => {
-  const { category, index, setCardId, history, selectedAnswerArr } = props
+  const { category, setCardId, history, selectedAnswerArr } = props
   const [showChildren, onShowChildrenChange]  = useState(false)
   // NOTE: this only runs "once", dynamic dev tool window change fails this
   const isMobile = isMobileCheck()
-  return <div style={{color: 'white', display: 'flex', flexDirection: 'column', backgroundColor: 'blue', flexGrow: 1, minHeight: 100, width: '100%'}}>
-    <CategoryName isMobile={isMobile} showChildren={showChildren} onShowChildrenChange={onShowChildrenChange} {...category} />
-    <div style={{display: 'flex', flexDirection: 'column' }}>
-    {
-      isMobile
-      ? showChildren ? <ClueContainer selectedAnswerArr={selectedAnswerArr} category={category} setCardId={setCardId} history={history}/>: null 
-      : <ClueContainer selectedAnswerArr={selectedAnswerArr} category={category} setCardId={setCardId} history={history}/>
-    }
+  return (
+    <div
+      style={{
+        color: 'white',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'blue',
+        flexGrow: 1,
+        minHeight: 100,
+        width: '100%'
+      }}
+    >
+      <CategoryName
+        isMobile={isMobile}
+        showChildren={showChildren}
+        onShowChildrenChange={onShowChildrenChange}
+        {...category}
+      />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+      {
+        isMobile
+        ? showChildren 
+          ? <ClueContainer selectedAnswerArr={selectedAnswerArr} category={category} setCardId={setCardId} history={history}/>
+          : null 
+        : <ClueContainer selectedAnswerArr={selectedAnswerArr} category={category} setCardId={setCardId} history={history}/>
+      }
+      </div>
     </div>
-  </div>
+  ) 
 }
 
 const Board = (props: any) => {
@@ -76,13 +142,24 @@ const Board = (props: any) => {
     selectedAnswerArr
   } = props
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', justifyContent: 'center', overflowY: 'auto', backgroundColor: 'blue', flexGrow: 1, minHeight: 500}}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignSelf: 'center',
+        justifyContent: 'center',
+        overflowY: 'auto',
+        backgroundColor: 'blue',
+        flexGrow: 1,
+        minHeight: 500
+      }}
+    >
       <div
         className='categories-container'
       >
       {
         categories.map( (category: any, index: number) => {
-          return <CategoryRow selectedAnswerArr={selectedAnswerArr} setCardId={setCardId} category={category} history={history} index={index}/>
+          return <CategoryRow key={`cr_${index}`} selectedAnswerArr={selectedAnswerArr} setCardId={setCardId} category={category} history={history} index={index}/>
         })
       }
       </div>
