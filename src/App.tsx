@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import Clue from './components/Clue'
+import Control from './components/Control'
 import Board from './components/Board'
 import {
   BrowserRouter as Router,
-  Switch,
   Route,
-  Link
 } from 'react-router-dom'
 import api from './api'
 import './App.css';
 import Button from './components/Button';
 
 
-const getCategories = (setData: (data: any[]) => null, setError: (err: string) => null, setDailyDoubleIndex: (index: number) => void) => {
-  api.getCategories()
+const getCategories = (setData: (data: any[]) => null, setError: (err: string) => null, setDailyDoubleIndex: (index: number) => void, { numClues = 5, numCategories = 5} = {}) => {
+  api.getCategories(numCategories)
   .then( categories => {
-    Promise.all(categories.map( (data: any) => api.getCategory(data.id)))
+    Promise.all(categories.map( (data: any) => api.getCategory(data.id, numClues)))
       .then( waterfall => {
         // @ts-ignore
-        const categoryNum = Math.floor(Math.random() * waterfall.length)
+        waterfall.forEach( (category: any) => {
+            category.clues = category.clues.splice(0, numClues)
+        })
+        const categoryNum = Math.floor(Math.random() * numCategories)
         // "5" is the number of clues to be shown in a category for now
-        const clueNum = Math.floor(Math.random() * 5)
+        const clueNum = Math.floor(Math.random() * numClues)
         // @ts-ignore
         const { id } = waterfall[categoryNum].clues[clueNum]
         setDailyDoubleIndex(id)
@@ -52,6 +53,8 @@ const getCurrentClue = (id: string, categories: any[]) => {
 const App: React.FC = () => {
   const [categories, setCategories] = useState([])
   const [currentClue, setCurrentClue] = useState({})
+  const [numClues, setNumClues] = useState(5)
+  const [numCategories, setNumCategories] = useState(5)
   const [selectedAnswerArr, _setSelectedAnswerArr] = useState([])
   const [dailyDoubleIndex, setDailyDoubleIndex] = useState(0)
   // hide in API
@@ -73,6 +76,8 @@ const App: React.FC = () => {
     localStorage.removeItem('currentClue')
     // @ts-ignore
     getCategories(setCategories, setError, setDailyDoubleIndex)
+    setNumCategories(5)
+    setNumClues(5)
     _setSelectedAnswerArr([])
     // @ts-ignore
     history.push('')
@@ -80,10 +85,10 @@ const App: React.FC = () => {
   }
   useEffect(() => {
     // @ts-ignore
-    getCategories(setCategories, setError, setDailyDoubleIndex)
+    getCategories(setCategories, setError, setDailyDoubleIndex, { numClues, numCategories })
     return () => {
     };
-  }, [])
+  }, [numClues, numCategories])
   if (error) {
     return <div>{error}</div>
   }
@@ -93,12 +98,14 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-          <div style={{padding: 10}}/>
-          <div style={{padding: 10}}>
-            <Route path="*" render={(props) => <Button label='Reset' onClick={() => resetGame(props.history)} />  }/>
-          </div>
+        <Control setNumCategories={setNumCategories} setNumClues={setNumClues} numClues={numClues} numCategories={numCategories}>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+            <div style={{padding: 10}}/>
+            <div style={{padding: 10}}>
+              <Route path="*" render={(props) => <Button label='Reset' onClick={() => resetGame(props.history)} />  }/>
+           </div>
         </div>
+        </Control>
         <Route 
           exact
           path='/clue/:id'
