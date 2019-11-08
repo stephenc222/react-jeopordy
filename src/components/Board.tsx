@@ -70,12 +70,11 @@ const CategoryRow = (props: any) => {
 
 const Board = (props: any) => {
   const {
-    categories,
+    categories = [],
     setCardId,
     history,
     selectedAnswerArr
   } = props
-  console.log({props})
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignSelf: 'center', justifyContent: 'center', overflowY: 'auto', backgroundColor: 'blue', flexGrow: 1, minHeight: 500}}>
       <div

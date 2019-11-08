@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Clue from './Clue';
 
-describe('App', () => {
+describe('Clue', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<App />, div);
+    ReactDOM.render(<Clue />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
 })

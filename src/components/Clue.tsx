@@ -4,8 +4,8 @@ import { isMobileCheck } from '../utils/isMobileCheck'
 
 const isMobile = isMobileCheck()
 const Clue = (props: any) => {
-  const { currentClue = {}, setSelectedAnswerArr, history, dailyDoubleIndex } = props
-  const clue = currentClue.id ? currentClue : JSON.parse(localStorage.getItem('currentClue') || '')
+  const { currentClue = {}, setSelectedAnswerArr = [], history, dailyDoubleIndex } = props
+  const clue = currentClue.id ? currentClue : JSON.parse(localStorage.getItem('currentClue') || '{}')
   const [answer, setAnswer] = useState('')
   const [showQuestion, onShowQuestionChange] = useState(true)
   const [showDailyDouble, onShowDailyDoubleChange] = useState(clue.id === dailyDoubleIndex)
