@@ -42,7 +42,7 @@ const Clue = (props: any) => {
       </div>
       {
         showQuestion
-        ? <div>{question}</div>
+        ? <div style={{display: 'flex', padding: '3em'}}>{question}</div>
         :<form onSubmit={(event) => checkAnswer(event, answer)}>
         <div style={{display: 'flex', padding: '3em', flexDirection: 'column'}}>
           <div style={{ display: 'flex', paddingBottom: 20, flexDirection: 'column' }}>
