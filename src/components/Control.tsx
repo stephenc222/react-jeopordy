@@ -20,8 +20,8 @@ const Control = (props: any) => {
           <div> Categories:&nbsp;</div>
         </div>
         <div style={{display: 'flex', flexDirection: 'column'}}>
-          <div><input style={{maxWidth: '4em', borderRadius: '0.5em'}} type='number' value={numClues} onChange={event => setNumClues(parseInt(event.target.value))}/></div>
-          <div><input style={{maxWidth: '4em', borderRadius: '0.5em'}} type='number' value={numCategories} onChange={event => setNumCategories(parseInt(event.target.value))}/></div>
+          <div><input style={{maxWidth: '4em', borderRadius: '0.5em', fontSize: 16}} type={isMobile ? 'tel': 'number'} value={numClues} onChange={event => setNumClues(parseInt(event.target.value) || 0)}/></div>
+          <div><input style={{maxWidth: '4em', borderRadius: '0.5em', fontSize: 16}} type={isMobile ? 'tel': 'number'} value={numCategories} onChange={event => setNumCategories(parseInt(event.target.value) || 0)}/></div>
         </div>
       </div>
       {isMobile && children || null}

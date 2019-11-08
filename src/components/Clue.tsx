@@ -36,7 +36,7 @@ const Clue = (props: any) => {
   }
 
   return (
-    <div style={{height: '100%', color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+    <div style={{ color: 'white', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
       <div style={{position: 'absolute', top: window.innerHeight - (isMobile ? 100 : 150), padding: 10}}>
         <Button onClick={() => onShowQuestionChange(!showQuestion)} label={`Show ${showQuestion ? 'Clue' : 'Question'}`}/>
       </div>
